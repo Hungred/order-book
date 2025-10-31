@@ -1,68 +1,18 @@
 <template>
   <div class="orderbook">
-    <h2>BTC-USDT Order Book (Real)</h2>
+    <h2>Order Book (Real)</h2>
 
-    <div class="table">
-      <!-- Sell Side -->
-      <div class="side">
-        <h3>Sell</h3>
-        <div class="row header">
-          <span class="price">Price</span>
-          <span class="size">Size</span>
-          <span class="total">Amount</span>
-        </div>
-        <div v-for="quote in asks" :key="quote.price" class="row sell">
-          <div
-            class="bar"
-            :style="{
-              width:
-                (quote.total /
-                  Math.max(
-                    bids[bids.length - 1]?.total || 1,
-                    asks[asks.length - 1]?.total || 1
-                  )) *
-                  100 +
-                '%',
-            }"
-          ></div>
-          <span class="price">{{ formatNumber(quote.price) }}</span>
-          <span :class="['size', quote.sizeChange]">{{
-            formatNumber(quote.size)
-          }}</span>
-          <span class="total">{{ formatNumber(quote.total) }}</span>
-        </div>
-      </div>
+    <el-tabs v-model="activeTab">
+      <el-tab-pane
+        v-for="symbol in symbols"
+        :key="symbol"
+        :label="symbol"
+        :name="symbol"
+      >
+        <OrderTable :bids="bids" :asks="asks" />
+      </el-tab-pane>
+    </el-tabs>
 
-      <!-- Buy Side -->
-      <div class="side">
-        <h3>Buy</h3>
-        <div class="row header">
-          <span class="price">Price</span>
-          <span class="size">Size</span>
-          <span class="total">Amount</span>
-        </div>
-        <div v-for="quote in bids" :key="quote.price" class="row buy">
-          <div
-            class="bar"
-            :style="{
-              width:
-                (quote.total /
-                  Math.max(
-                    bids[bids.length - 1]?.total || 1,
-                    asks[asks.length - 1]?.total || 1
-                  )) *
-                  100 +
-                '%',
-            }"
-          ></div>
-          <span class="price">{{ formatNumber(quote.price) }}</span>
-          <span :class="['size', quote.sizeChange]">{{
-            formatNumber(quote.size)
-          }}</span>
-          <span class="total">{{ formatNumber(quote.total) }}</span>
-        </div>
-      </div>
-    </div>
     <div class="info">
       <h3>實作說明</h3>
       <ul>
@@ -75,32 +25,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ElTabs, ElTabPane } from 'element-plus';
+import OrderTable from './OrderTable.vue';
 
+const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT']; // 幣別陣列
+const activeTab = ref('BTCUSDT'); // 預設 Tab
 const bids = ref([]);
 const asks = ref([]);
 const prevBids = ref([]);
 const prevAsks = ref([]);
 let ws = null;
 
-const formatNumber = (n) =>
-  n.toLocaleString(undefined, {
-    minimumFractionDigits: 5,
-    maximumFractionDigits: 5,
-  });
+const connectWs = (symbol) => {
+  if (ws) ws.close();
+  bids.value = [];
+  asks.value = [];
+  prevBids.value = [];
+  prevAsks.value = [];
 
-const calcTotals = (array) => {
-  let total = 0;
-  return array.map((item) => {
-    total += item.size;
-    return { ...item, total };
-  });
-};
-
-onMounted(() => {
-  ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@depth5@100ms');
-
-  ws.onopen = () => console.log('Connected to Binance WebSocket');
+  ws = new WebSocket(
+    `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth5@100ms`
+  );
 
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
@@ -132,13 +78,28 @@ onMounted(() => {
       asks.value = calcTotals(processChanges(asksData, prevAsks.value));
     }
   };
+};
 
-  ws.onclose = () => console.log('WebSocket closed');
+// 當 Tab 切換時重新連線
+watch(activeTab, (newTab) => {
+  connectWs(newTab);
+});
+
+onMounted(() => {
+  connectWs(activeTab.value);
 });
 
 onUnmounted(() => {
   if (ws) ws.close();
 });
+
+const calcTotals = (array) => {
+  let total = 0;
+  return array.map((item) => {
+    total += item.size;
+    return { ...item, total };
+  });
+};
 </script>
 
 <style scoped>
@@ -221,5 +182,8 @@ onUnmounted(() => {
   100% {
     background-color: transparent;
   }
+}
+::v-deep(.el-tabs__item) {
+  color: white;
 }
 </style>
