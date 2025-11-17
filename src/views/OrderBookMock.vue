@@ -29,7 +29,7 @@
               width: (quote.total / asks[asks.length - 1].total) * 100 + '%',
             }"
           ></div>
-          <span class="price">{{ formatNumber(quote.price) }}</span>
+          <span class="price">{{ $f.formatNumber(quote.price) }}</span>
           <span
             class="size"
             :class="
@@ -39,9 +39,9 @@
                 ? 'size-down'
                 : ''
             "
-            >{{ formatNumber(quote.size) }}</span
+            >{{ $f.formatNumber(quote.size) }}</span
           >
-          <span class="total">{{ formatNumber(quote.amount) }}</span>
+          <span class="total">{{ $f.formatNumber(quote.amount) }}</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
               width: (quote.total / bids[bids.length - 1].total) * 100 + '%',
             }"
           ></div>
-          <span class="price">{{ formatNumber(quote.price) }}</span>
+          <span class="price">{{ $f.formatNumber(quote.price) }}</span>
           <span
             class="size"
             :class="
@@ -81,9 +81,9 @@
                 ? 'size-down'
                 : ''
             "
-            >{{ formatNumber(quote.size) }}</span
+            >{{ $f.formatNumber(quote.size) }}</span
           >
-          <span class="total">{{ formatNumber(quote.amount) }}</span>
+          <span class="total">{{ $f.formatNumber(quote.amount) }}</span>
         </div>
       </div>
     </div>
@@ -175,12 +175,6 @@ const generateMockOrders = () => {
     return { ...a, total: askTotal };
   });
 };
-
-const formatNumber = (n) =>
-  n.toLocaleString(undefined, {
-    minimumFractionDigits: 5,
-    maximumFractionDigits: 5,
-  });
 
 onMounted(() => {
   generateMockOrders();

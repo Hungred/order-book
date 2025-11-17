@@ -17,17 +17,17 @@
           <el-table :data="asks" stripe style="width: 50%">
             <el-table-column prop="price" label="Price">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.price) }}</div>
+                <div>{{ $f.formatNumber(scope.row.price) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="size" label="Size">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.size) }}</div>
+                <div>{{ $f.formatNumber(scope.row.size) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="amount" label="Amount">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.amount) }}</div>
+                <div>{{ $f.formatNumber(scope.row.amount) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="total" label="Total">
@@ -47,17 +47,17 @@
           <el-table :data="bids" stripe style="width: 50%">
             <el-table-column prop="price" label="Price">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.price) }}</div>
+                <div>{{ $f.formatNumber(scope.row.price) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="size" label="Size">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.size) }}</div>
+                <div>{{ $f.formatNumber(scope.row.size) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="amount" label="Amount">
               <template #default="scope">
-                <div>{{ formatNumber(scope.row.amount) }}</div>
+                <div>{{ $f.formatNumber(scope.row.amount) }}</div>
               </template>
             </el-table-column>
             <el-table-column prop="total" label="Total">
@@ -173,12 +173,6 @@ const calcTotalsAndAmounts = (array) => {
     };
   });
 };
-
-const formatNumber = (n) =>
-  n.toLocaleString(undefined, {
-    minimumFractionDigits: 4,
-    maximumFractionDigits: 4,
-  });
 
 const maxTotal = computed(() => {
   const allTotals = [
