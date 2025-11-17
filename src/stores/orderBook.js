@@ -5,7 +5,18 @@ import { matchOrders } from '@/utils/matchEngine';
 export const useOrderBookStore = defineStore('orderBook', () => {
   const bids = ref([]); // buy side (高到低)
   const asks = ref([]); // sell side (低到高)
-  const trades = ref([]); // trade history
+  const trades = ref([]); // 歷史成交紀錄
+
+  const MAX_TRADES = 10; // 最新交易筆數上限
+
+  function addTrades(newTrades) {
+    if (!newTrades.length) return;
+
+    trades.value.unshift(...newTrades);
+
+    // 永遠只保留最新 MAX_TRADES 筆
+    trades.value = trades.value.slice(0, MAX_TRADES);
+  }
 
   function replaceSnapshot(newBids, newAsks) {
     bids.value = newBids.sort((a, b) => b.price - a.price);
@@ -26,9 +37,7 @@ export const useOrderBookStore = defineStore('orderBook', () => {
     } = matchOrders(bids.value, asks.value);
     bids.value = buys;
     asks.value = sells;
-    if (newTrades.length) trades.value.unshift(...newTrades);
-    // keep history short
-    trades.value = trades.value.slice(0, 200);
+    addTrades(newTrades);
   }
 
   function mergeOrders(existing, incoming, side) {
@@ -47,7 +56,7 @@ export const useOrderBookStore = defineStore('orderBook', () => {
     }, []);
 
     const sorted = merged.sort((a, b) =>
-      side === 'buy' ? b.price - a.price : a.price - b.price
+      side === 'bid' ? b.price - a.price : a.price - b.price
     );
 
     return sorted;
@@ -71,8 +80,8 @@ export const useOrderBookStore = defineStore('orderBook', () => {
     } = matchOrders(bids.value, asks.value);
     bids.value = buys;
     asks.value = sells;
-    if (newTrades.length) trades.value.unshift(...newTrades);
-    trades.value = trades.value.slice(0, 200);
+
+    addTrades(newTrades);
   }
 
   return { bids, asks, trades, replaceSnapshot, applyUpdate, placeOrder };

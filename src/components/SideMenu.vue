@@ -8,6 +8,9 @@
       <li>
         <router-link to="/real">Real WebSocket</router-link>
       </li>
+      <li>
+        <router-link to="/dashboard">DashBoard</router-link>
+      </li>
     </ul>
   </div>
 </template>
