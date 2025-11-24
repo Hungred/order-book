@@ -1,5 +1,75 @@
-# Vue 3 + Vite
+# Order Book Demo（訂單簿範例）
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一個使用 **Vue 3 + Pinia + Element Plus + Vite** 建立的即時訂單簿模擬系統。
+本專案展示了即時買賣盤資料處理、撮合邏輯、以及前端效能與架構設計方式。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+> **注意**：此專案使用模擬資料，並未串接真實交易所 API。
+
+---
+
+## 🔍 功能特色
+
+- 模擬訂單深度資料（假 WebSocket）
+- 買盤（bids）與賣盤（asks）分欄顯示
+- 使用者可手動輸入買/賣訂單
+- 簡易撮合引擎：當買價 >= 賣價 時自動成交
+- 使用 Pinia 做即時更新與狀態集中管理
+- 以 Element Plus 及 Tailwind 打造清晰的 UI 排版
+- 模組化架構：撮合邏輯、模擬數據、元件皆分離管理
+
+---
+
+## 📁 安裝與使用
+
+# 1️⃣ 下載專案
+
+git clone https://github.com/Hungred/order-book.git
+cd order-book
+
+# 2️⃣ 安裝依賴
+
+npm install
+
+# 3️⃣ 啟動開發伺服器
+
+npm run dev
+
+# 瀏覽器開啟 http://localhost:5173/
+
+# 4️⃣ 建置生產版本
+
+npm run build
+
+# 5️⃣ 預覽打包後版本
+
+npm run preview
+
+---
+
+## 🔍 未來改善方向
+
+- **串接真實交易所 API（Binance / Bybit / OKX）**
+
+  - 使用 WebSocket depth stream 與 ticker stream
+  - 支援多幣種切換（BTC/ETH/BCH…）
+
+- **訂單聚合（Order Aggregation）**
+
+  - 自動合併同價格委託（Price Level）
+  - 支援 Depth Level：5 / 10 / 20
+
+- **更完整的撮合引擎（Matching Engine）**
+
+  - 改良撮合邏輯
+  - 支援高頻撮合壓力測試（Stress Test）
+  - 支援部分成交（Partial Fill）
+
+- **新增市價單（Market Order）**
+
+  - 支援 IOC / FOK / GTC 等訂單類型
+
+- **更多視覺化體驗**
+
+  - 深度圖（Depth Chart）
+  - 成交歷史逐筆（Trade History）
+  - 成交量與趨勢圖（Volume / Trend）
