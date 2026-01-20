@@ -7,6 +7,49 @@
 
 ---
 
+## 📂 專案結構 (Project Structure)
+
+```text
+order-book/
+├─ src/                    ≤ 主要程式碼（Vue + Pinia + Components）
+│   ├─ components/         ≤ UI 元件
+│   │   ├─ OrderInput.vue
+│   │   ├─ OrderStatus.vue
+│   │   ├─ OrderTable.vue
+│   │   ├─ SideMenu.vue
+│   │   └─ TradeHistory.vue
+│   │
+│   ├─ composables/        ≤ 可重用邏輯（useOrderBook、useFakeSocket）
+│   │   ├─ useFakeSocket.js
+│   │   └─ useOrderBook.js
+│   │
+│   ├─ stores/             ≤ Pinia 全域狀態管理
+│   │   └─ orderBook.js
+│   │
+│   ├─ utils/              ≤ 工具函式 / helper / 搓合邏輯
+│   │   ├─ matchOrders.js 搓合邏輯
+│   │   └─ tools.js 數字tool
+│   │
+│   ├─ views/              ≤ 頁面
+│   │   ├─ Dashborad.vue
+│   │   ├─ Login.vue
+│   │   ├─ OrderBookMock.vue
+│   │   └─ OrderBookReal.vue
+│   │
+│   ├─ App.vue             ≤ 根元件
+│   ├─ main.js             ≤ 入口初始化（掛載 Vue、Pinia）
+│   └─ router.js           ≤ 路由設定
+│
+├─ .gitignore
+├─ package.json
+├─ vite.config.js          ≤ Vite 專案建置設定
+├─ README.md               ≤ 專案說明
+└─ ...
+
+```
+
+---
+
 ## 🔍 功能特色
 
 - 模擬訂單深度資料（假 WebSocket）
