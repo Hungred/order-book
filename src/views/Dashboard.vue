@@ -24,6 +24,17 @@
       <h3>實作說明</h3>
       <ul class="list-disc pl-5">
         <li>
+          onMounted 開始每 0.8
+          秒生成一批新的買賣單，將新資料與現有資料合併後，<br />立即觸發撮合邏輯matchEngine，產生成交並更新資料。
+        </li>
+        <li>
+          買單價格按高到低排序，賣單價格按低到高排序，取各自的第一筆，成交價以賣方價格成交，<br />只要最高買價大於等於最低賣價，就用可成交的最小數量一直成交，直到價格不再重疊為止。
+        </li>
+        <li>
+          沒有買單了 或 沒有賣單了 或 最高買價 <
+          最低賣價（價格沒有交集），就會停止搓合。
+        </li>
+        <li>
           使用假資料模擬交易所的買賣盤快照與即時更新（下一步接上真實的 WebSocket
           資料）
         </li>
@@ -41,6 +52,10 @@
           使用 Element Plus 、 Tailwind CSS 排版
           layout（左：Buy/Sell，右：Trades，中：OrderInput）
         </li>
+      </ul>
+      <h3 clase="mt-4">可優化項目</h3>
+      <ul class="list-disc pl-5">
+        <li>同價格的單子應該以時間優先</li>
       </ul>
     </div>
   </div>

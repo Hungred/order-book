@@ -17,10 +17,10 @@ const store = useOrderBookStore();
 const { bids, asks, trades } = storeToRefs(store);
 
 const totalBids = computed(() =>
-  bids.value.reduce((sum, o) => sum + o.amount, 0).toFixed(2)
+  bids.value.reduce((sum, o) => sum + Number(o.amount), 0).toFixed(2)
 );
 const totalAsks = computed(() =>
-  asks.value.reduce((sum, o) => sum + o.amount, 0).toFixed(2)
+  asks.value.reduce((sum, o) => sum + Number(o.amount), 0).toFixed(2)
 );
 const lastTradePrice = computed(() => trades.value[0]?.price ?? '-');
 </script>
